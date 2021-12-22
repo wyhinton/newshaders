@@ -1,6 +1,6 @@
 uniform float u_time;
 uniform vec2 u_resolution;
-
+// uniform 
 vec2 smoothRot(vec2 p,float s,float m,float c,float d){
   s*=0.5;
   float k=length(p);

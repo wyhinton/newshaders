@@ -88,19 +88,19 @@ void main()
         // vec3 xxx = rayDirection(, vec2(.1), uv);
         for(int k = 0; k < 9; k++){    
             b+= v*.02;
-            uv += (t2.yx)/(scale*.95+sin(u_time*.00001));
-            t2 = triangle_wave((rot(uv.yx, u_time*.10001)-.5/b*.5+sin(b*u_time*.01)*.5),scale)*scale;
-            vec2 t3 = triangle_wave(rot(uv, u_time*.001),scale)/scale;
-            // uv.yx = -(t2+pow(t3, vec2(.5+pow(b, 1.))))*.9;
-            uv.x += log(v)*b*100.*sin(u_time*cos(u_time*.001));
+            // uv += (t2.yx)/(scale*.95+sin(u_time*.00001));
+            // t2 = triangle_wave((rot(uv.yx, u_time*.10001)-.5/b*.5+sin(b*u_time*.01)*.5),scale)*scale;
+            // vec2 t3 = triangle_wave(rot(uv, u_time*.001),scale)/scale;
+            // uv.yx = -(t2+pow(t3, vec2(.3+pow(b, 1.))))*.9;
+            // uv.x += log(v)*b*100.*sin(u_time*cos(u_time*.001));
             // uv *= pow(nrand3(uv.xy).y, 40.); // uv.xy += rot(vec2(.5+sin(u_time*.0005)), u_time*.0001).x*b;
         }
-
+    //   uv.xy+=mod(u_time, 100.);
           for(int k = 0; k < 10; k++){    
               z+= .2;
               uv.xy += sin(ceil(uv.xy/sin(uv.y)*st));
             //   uv.xy += *=mod(u_time, 1000.);
-              uv.xy += sin(gl_FragCoord.xy/u_resolution.xy)*(cos(u_time/abs(uv.x))*sin(u_time*.02*z)*tan(sin(u_time)*cos(u_time*.1)*.03)-2.0 );
+              uv.xy += sin(gl_FragCoord.xy/u_resolution.xy*.1)*(cos(u_time/abs(uv.x))*sin(u_time*.02*z)*tan(sin(u_time)*cos(u_time*.1)*.03)-2.0 );
 
             // uv.xy += rot(vec2(.5+sin(u_time*.0005)), u_time*.0001).x*b;
         }
