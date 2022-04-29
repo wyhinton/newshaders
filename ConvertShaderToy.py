@@ -2,7 +2,9 @@ import os
 
 path = os.getcwd()
 
-SHADER_FILE = "VornoiWeave.glsl"
+SHADER_FILE = "Butterfly.glsl"
+# SHADER_FILE = "NeonFalloff.glsl"
+# SHADER_FILE = "VornoiWeave.glsl"
 # SHADER_FILE = "FractalMaze.glsl"
 # SHADER_FILE = "RandomMultEffect.glsl"
 # SHADER_FILE = "FloatLogger.glsl"
@@ -26,7 +28,6 @@ def addUniforms():
         u = "uniform "+u+";"
         final.append(u)
     return "\n".join(final)+"\n"
-
         
     
 
