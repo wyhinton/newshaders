@@ -2,7 +2,8 @@ import os
 
 path = os.getcwd()
 
-SHADER_FILE = "Butterfly.glsl"
+SHADER_FILE = "ShipHud.glsl"
+# SHADER_FILE = "Butterfly.glsl"
 # SHADER_FILE = "NeonFalloff.glsl"
 # SHADER_FILE = "VornoiWeave.glsl"
 # SHADER_FILE = "FractalMaze.glsl"
