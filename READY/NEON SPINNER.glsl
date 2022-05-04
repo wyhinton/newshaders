@@ -54,16 +54,26 @@ float fbm(vec2 x) {
 //0 100
 int Count = 10; 
 vec4 Color = vec4(1., 1., 1, 1. );
+//0 1
 float Speed = .1; 
+//0 1 
 float Inc = .1;
-float Scale = 1.5;
-float XOff = .5;
-float YOff = .5;
-float WiggleSpeed = .1;
-float Thickness1 = 1.;
+//0 5 
+float Scale = 2.5;
+//0 1
+float XOff = .0;
+//0 1
+float YOff = .0;
+//0 10
+float WiggleSpeed = .0;
 //0 1000
 float TimeOffset = 0.;
-//END_PARAMS
+//0 1
+float Width1 = .5;
+//0 1
+float Width2 = 0.;
+//-1 1 
+float Invert = -1.;//END_PARAMS
 
 vec3 neon(float val, vec3 color) {
     float st = sin(u_time);
@@ -89,14 +99,15 @@ void main()
 {
     // Normalized pixel coordinates (from 0 to 1)
     vec2 uv = gl_FragCoord.xy/u_resolution.xy;
+    uv -= .5;
+    // uv.x -= .5;
     float localTime = u_time+TimeOffset;
     uv*=Scale;
-    uv-=Scale;
+    // uv-=Scale*.5;
     float st = sin(localTime);
     float nz = noise(vec2(localTime*WiggleSpeed ));
-    uv+= vec2(XOff*st, YOff);
+    uv -= vec2(XOff, YOff);
     uv += vec2(nz);
-    uv*=2.;
  
     float counter = 1.;
     vec3 col = vec3(0.);
@@ -108,7 +119,7 @@ void main()
                 float zq = smoothstep( .1, .19, r)*length(uv);
                 // uv*=smoothstep( .1, .19, r);
                 // A gradient from white in the center to black at the edges
-                float center_bar = (1. - abs(uv.x - 0.5)) * 2.0 - 1.0;
+                float center_bar = (1. - abs(uv.x - 0.))  * 2.0 + (-1.0+Width1);
             
                 // Color for the bar
                 vec3 color = Color.rgb;
@@ -130,13 +141,13 @@ void main()
                 // uv *= counter;
 
                 // A gradient from white in the center to black at the edges
-                float center_bar = (1. - abs(uv.x - 0.5)) * 2.0 - 1.0;
+                float center_bar = (1. - abs(uv.x - 0.5)) * 2.0 + (-1.0+Width2);
                 
                 // Color for the bar
                 vec3 color = Color.rgb;
                 color *= floor(counter/2.);
                 col += neon(center_bar, color);
-                counter+=Inc;
+                counter+=Inc*Invert;
         }
   
     }
