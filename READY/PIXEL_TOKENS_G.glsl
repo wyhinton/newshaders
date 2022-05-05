@@ -35,16 +35,22 @@ float getBox(vec2 p, float left, float bottom, float width, float height) {
     return x_range * y_range;
 }
 
-float getUvBox(vec2 p, float left, float bottom, float width, float height) {
+vec2 getUvBox(vec2 p, float left, float bottom, float width, float height) {
     float sm = 0.002;
     // p.x = fract(p.x*10.);
     float x_range = smoothstep(left - sm, left, p.x) - smoothstep(left + width, left + width + sm, p.x);
     float y_range = smoothstep(bottom - sm, bottom, p.y) - smoothstep(bottom + height,bottom + height + sm, p.y);
     // return smoothstep(left, p.x+width, p.x+.5);
     // return p.x;
-    // float x1 
-    return x_range;
+    float x1 = smoothstep(left - sm, left, p.x);
+    float x2 =  smoothstep(left + width, left + width + sm, p.x);
+    float x_uv = smoothstep(left, left+width, p.x)*x_range;
+    float y_uv = smoothstep(bottom, bottom+height, p.y)*y_range;
+    // float qb = smoothstep
+    // return y_uv;
+    // return qb*x_range;
     // return x_range * y_range;
+    return vec2(x_uv, y_uv);
 }
 
 
@@ -190,50 +196,24 @@ void main()
             // color = vec3(f*.1);
             color += dust*baseColor + block*z + shine;
         } 
-        if (z > .9 ){
-   
-            // uv = uv * (1.0 - 0.2 * smoothstep(0.25, 0.0, dot(uv, uv)));
-            // uv = uv * (1.0 - 0.2 * smoothstep(0.25, 0.0, dot(uv, uv)));
-            // uv = uv + vec2(0.5);
+        if (z > .94 ){
+          
             vec2 size = 1.8*z*vec2(0.04, 0.04 + 0.1*rand(tick+0.2));
-            // float b = softBox(uv-pos, size, 0.01);
-            float b = getBox((uv-pos), .1, .1, size.x, size.y);
-            float dust = z*smoothstep(0.22, 0.0, b)*pulse*0.5;
-            qbTest = smoothstep(pos.x, pos.x+size.x, uv.x);
-            qbTest = smoothstep(pos.x, pos.x+size.x, uv.x);
-            qbTest = smoothstep(pos.x, (uv-pos).x, uv.x);
-            qbTest = smoothstep(pos.x*size.x, size.x+pos.x, uv.x+pos.x);
-            qbTest = smoothstep(pos.x*size.x, pos.x+size.x, uv.x+pos.x);
-            qbTest = getUvBox((uv-pos), .1, .1, size.x, size.y);
-            mapTest = texture(u_texture_0, vec2(qbTest, uv.y))*b;
-            // qbTest = smoothstep(.2, .5, uv.x);
-            // uv = vec2(b*.4);
-            // uv += b;
-            // uv *= 2.;
-            // uv.x += .5;
-        //     // #ifdef SHOW_BLOCKS
-        //     float block = blockOpacity*z*smoothstep(0.002, 0.0, b);
-        //     float shine = 0.6*z*pulse*smoothstep(-0.002, b, 0.007);
-        //     // block *=f;
-        //     vec2 gv = uv/size;
-        //     // vec4 c = texture(u_texture_0, gv-pos);
-        //     // color = vec3(f*.1);
-        //     // block 
-        //     // color += block;
-        //     color += dust*baseColor + block*z + shine;
-         
-        //     // color += smoothstep((uv-pos).x, uv.x, 1.1);
-        //     // color += dust*baseColor + block*z + shine;
-        //     // color += gv.x;
-        //     float n = smoothstep(pos.x+size.x, uv.x, pos.x);
-        //     vec4 c = texture(u_texture_0, vec2(n, pos.y));
-        //     // float n = smoothstep(pos.x, pos.x+size.x, uv.x);
-        //     color += n;
-        //     color = mix(color, c.rgb, 1.);
-        //     // color.rgb += c.rgb*.1;
-        //     // color.r*=.5;
-        //     // color.r += c.r;
-        //     // color.g += pos.y*b;
+            float glowBox = softBox(uv-pos, size, 0.01);
+            float dust = z*smoothstep(0.22, 0.0, glowBox)*pulse*0.5;
+            // #ifdef SHOW_BLOCKS
+            float block = blockOpacity*z*smoothstep(0.002, 0.0, glowBox);
+            float shine = 0.6*z*pulse*smoothstep(-0.002, glowBox, 0.007);
+            // color = vec3(f*.1);
+            color += dust*baseColor + block*z + shine;
+            
+
+            float imageBox = getBox((uv-pos), .1, .1, size.x, size.y);
+            vec2 imageMap = getUvBox((uv-pos), .1, .1, size.x, size.y);   
+            mapTest = texture(u_texture_0, imageMap)*imageBox;
+            
+            // color += (dust*baseColor + glowBox*z + shine);
+            color += mapTest.rgb;
         } 
         // if (mod(z, .5) > .9 ){
         //     vec2 size = 1.8*z*vec2(0.04, 0.04 + 0.1*rand(tick+0.2));
@@ -291,8 +271,8 @@ void main()
 	
 	color -= rand(uv)*.04;
 	fragColor = vec4(color, 1.0);
-	fragColor = vec4(uv.x);
-	fragColor = vec4(qbTest);
+	// fragColor = vec4(uv.x);
+	// fragColor = vec4(qbTest);
 	// fragColor = mapTest;
 	// fragColor = vec4(length(ng.x));
 }

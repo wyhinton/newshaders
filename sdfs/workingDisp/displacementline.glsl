@@ -31,7 +31,7 @@ uniform sampler2D u_texture_4;
 uniform sampler2D u_texture_5;
 uniform sampler2D u_texture_6;
 uniform sampler2D u_texture_12;
-uniform sampler2D u_texture_13;
+// uniform sampler2D u_texture_13;
 uniform sampler2D u_buffer0;
 
 vec2 matcap(vec3 eye, vec3 normal) {

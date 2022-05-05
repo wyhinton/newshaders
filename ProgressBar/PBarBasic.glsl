@@ -190,9 +190,10 @@ vec3 makeSinBox(vec2 p, float left, float bottom, float width, float height, flo
 	// float fSinYdX = (GetCurveDeriv(fCurveX) * 0.25) * u_resolution.y / u_resolution.x;
 	// float fDistanceToCurve = abs(fSinY - gl_FragCoord.y) / sqrt(1.0+fSinYdX*fSinYdX);
 	float fCurveX = gl_FragCoord.x / u_resolution.x;
-    float amp = height;
-    float yPos = bottom*u_resolution.y*-.3;
-	float fSinY = (GetCurve(fCurveX) * amp + yPos) * height*u_resolution.y;
+    float amp =  (u_resolution.y/100.)*height*100.;
+    float yPos = u_resolution.y*bottom/.3;
+    // float yPos = 1000.;
+	float fSinY = (GetCurve(fCurveX) * amp - 2.) * 1.;
 	float fSinYdX = (GetCurveDeriv(fCurveX) * 0.25) * u_resolution.y / u_resolution.x;
 	float fDistanceToCurve = abs(fSinY - gl_FragCoord.y) / sqrt(1.0+fSinYdX*fSinYdX);
 	float fSetPixel = fDistanceToCurve - 1.0; // Add more thickness
